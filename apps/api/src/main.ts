@@ -1,21 +1,24 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
+import { expressServerJack } from "./app/express-server-jack"
+import { expressServer } from './app/express-server'
+import { httpServer } from './app/http-server'
+import { httpExercise } from './app/http-exercise'
 
-import * as express from 'express';
-import * as path from 'path';
+enum Option {
+  http = 'httpServer',
+  exercise = 'httpExecrcise',
+  jack = 'expressServerJack',
+  express = 'expressServer'
+}
 
-const app = express();
-
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
-
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to api!' });
-});
+let server
+const option = Option.express
+if (option == Option.express) {server = expressServer} 
+else if (option == Option.http) {server = httpServer}
+else if (option == Option.exercise) {server = httpExercise}
+else if (option == Option.jack) {server = expressServerJack}
 
 const port = process.env.port || 3333;
-const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
+server.listen(port, () => {
+  console.log(`Listening at http://localhost:${port}`);
 });
 server.on('error', console.error);
